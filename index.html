@@ -1,155 +1,390 @@
 ```html
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Verificación de dispositivo</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Device Information Scanner</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background: #f2f2f2;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             min-height: 100vh;
+
             margin: 0;
+
+            padding: 20px;
         }
 
         .card {
+
             background: white;
-            width: 90%;
-            max-width: 500px;
+
+            width: 100%;
+
+            max-width: 650px;
+
             padding: 30px;
+
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,0.15);
         }
 
         h2 {
+
             text-align: center;
+
+            margin-top: 0;
+        }
+
+        .descripcion {
+
+            text-align: center;
+
+            color: #555;
+
+            line-height: 1.5;
         }
 
         button {
+
             width: 100%;
-            padding: 14px;
+
+            padding: 15px;
+
             margin-top: 20px;
+
             border: none;
+
             border-radius: 8px;
+
             background: #2563eb;
+
             color: white;
+
             font-size: 16px;
+
             cursor: pointer;
         }
 
         button:hover {
+
             background: #1d4ed8;
         }
 
+        button:disabled {
+
+            background: #94a3b8;
+
+            cursor: not-allowed;
+        }
+
         #resultado {
-            margin-top: 20px;
-            text-align: left;
+
+            margin-top: 25px;
+
             word-break: break-word;
         }
 
         .seccion {
-            margin-top: 25px;
-            padding: 15px;
+
+            margin-top: 20px;
+
+            padding: 18px;
+
             background: #f8fafc;
+
             border-radius: 10px;
+
+            border: 1px solid #e2e8f0;
         }
 
         .seccion h3 {
+
             margin-top: 0;
+
+            margin-bottom: 15px;
+
             color: #2563eb;
+
+            font-size: 18px;
         }
 
         .dato {
-            margin: 8px 0;
+
+            margin: 9px 0;
+
+            line-height: 1.4;
         }
 
         .dato strong {
+
             display: inline-block;
-            min-width: 125px;
+
+            width: 150px;
+
+            vertical-align: top;
+
+            color: #334155;
         }
 
-        .cargando {
+        .valor {
+
+            color: #111827;
+        }
+
+        .ok {
+
+            color: #15803d;
+
+            font-weight: bold;
+        }
+
+        .no {
+
+            color: #dc2626;
+
+            font-weight: bold;
+        }
+
+        .warning {
+
+            color: #ca8a04;
+
+            font-weight: bold;
+        }
+
+        .loading {
+
             text-align: center;
+
+            padding: 20px;
+
             color: #555;
         }
 
         .mapa {
+
             display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
+
+            margin-top: 15px;
+
+            padding: 11px 16px;
+
             background: #16a34a;
+
             color: white;
+
             text-decoration: none;
+
             border-radius: 7px;
         }
+
+        .mapa:hover {
+
+            background: #15803d;
+        }
+
+        .footer {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            font-size: 12px;
+
+            color: #777;
+
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+
+            .card {
+
+                padding: 20px;
+            }
+
+            .dato strong {
+
+                display: block;
+
+                width: 100%;
+
+                margin-bottom: 2px;
+            }
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="card">
 
-    <h2>Verificación</h2>
+    <h2>Device Information Scanner</h2>
 
-    <p>
-        C malicho pa mi.
+    <p class="descripcion">
+
+        Presiona el botón para consultar la información
+        que tu navegador permite proporcionar.
+
     </p>
 
-    <button onclick="obtenerInformacion()">
+    <button
+        id="btn"
+        onclick="iniciarEscaneo()">
+
         Dale Continuar Pes
+
     </button>
 
     <div id="resultado"></div>
+
+    <div class="footer">
+
+        Algunos datos pueden aparecer como
+        "Not Available" dependiendo del navegador,
+        dispositivo y permisos.
+
+    </div>
 
 </div>
 
 
 <script>
 
+
 /* =========================================================
    FUNCIÓN PRINCIPAL
    ========================================================= */
 
-async function obtenerInformacion() {
+async function iniciarEscaneo() {
 
-    const resultado = document.getElementById("resultado");
+    const resultado =
+        document.getElementById("resultado");
+
+    const boton =
+        document.getElementById("btn");
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Recopilando información...";
 
     resultado.innerHTML = `
-        <div class="cargando">
-            <p>Recopilando información...</p>
-            <p>Espera unos segundos.</p>
+
+        <div class="loading">
+
+            <p>
+                Analizando dispositivo...
+            </p>
+
+            <p>
+                Obteniendo información de red...
+            </p>
+
         </div>
+
     `;
+
 
     try {
 
-        // Obtener información del dispositivo
-        const dispositivo = obtenerDispositivo();
+        /*
+         * Información local
+         */
 
-        // Obtener información de IP
-        const ipInfo = await obtenerIP();
+        const dispositivo =
+            obtenerInformacionDispositivo();
 
-        // Obtener ubicación GPS
-        obtenerUbicacion(dispositivo, ipInfo);
+
+        /*
+         * Información IP
+         */
+
+        const ipInfo =
+            await obtenerInformacionIP();
+
+
+        /*
+         * Mostrar información inicial
+         */
+
+        mostrarInformacion(
+            dispositivo,
+            ipInfo,
+            null,
+            "Solicitando ubicación..."
+        );
+
+
+        /*
+         * Solicitar GPS
+         */
+
+        obtenerUbicacion(
+            dispositivo,
+            ipInfo
+        );
+
 
     } catch (error) {
 
         console.error(error);
 
         resultado.innerHTML = `
-            <p>
-                Ocurrió un error al obtener la información.
-            </p>
-            <p>
-                ${error.message}
-            </p>
+
+            <div class="seccion">
+
+                <h3>[!] Error</h3>
+
+                <p>
+                    ${escapeHTML(error.message)}
+                </p>
+
+            </div>
+
         `;
+    }
+
+    finally {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Volver a escanear";
     }
 }
 
@@ -158,44 +393,228 @@ async function obtenerInformacion() {
    INFORMACIÓN DEL DISPOSITIVO
    ========================================================= */
 
-function obtenerDispositivo() {
+function obtenerInformacionDispositivo() {
 
-    const ua = navigator.userAgent;
+    const ua =
+        navigator.userAgent || "";
 
-    // Sistema operativo
-    let os = detectarSistemaOperativo(ua);
-
-    // Plataforma
-    let plataforma = detectarPlataforma(ua);
-
-    // CPU
-    let cpuCores = navigator.hardwareConcurrency || "Not Available";
-
-    // RAM
-    // deviceMemory no está disponible en todos los navegadores
-    let ram = navigator.deviceMemory
-        ? navigator.deviceMemory + " GB"
-        : "Not Available";
-
-    // Resolución
-    let resolucion =
-        screen.width + "x" + screen.height;
-
-    // Navegador
-    let navegador = detectarNavegador(ua);
-
-    // GPU
-    let gpu = obtenerGPU();
 
     return {
-        os: os,
-        plataforma: plataforma,
-        cpuCores: cpuCores,
-        ram: ram,
-        gpuVendor: gpu.vendor,
-        gpu: gpu.renderer,
-        resolucion: resolucion,
-        navegador: navegador
+
+        /*
+         * Sistema operativo
+         */
+
+        os:
+            detectarSistemaOperativo(ua),
+
+
+        /*
+         * Plataforma
+         */
+
+        platform:
+            detectarPlataforma(ua),
+
+
+        /*
+         * Tipo de dispositivo
+         */
+
+        deviceType:
+            detectarTipoDispositivo(),
+
+
+        /*
+         * CPU
+         */
+
+        cpuCores:
+            navigator.hardwareConcurrency
+            || "Not Available",
+
+
+        /*
+         * RAM
+         */
+
+        ram:
+            navigator.deviceMemory
+            ? navigator.deviceMemory + " GB"
+            : "Not Available",
+
+
+        /*
+         * Arquitectura
+         */
+
+        architecture:
+            obtenerArquitectura(),
+
+
+        /*
+         * Touch
+         */
+
+        touch:
+            navigator.maxTouchPoints > 0
+            ? "Yes"
+            : "No",
+
+
+        maxTouchPoints:
+            navigator.maxTouchPoints
+            || 0,
+
+
+        /*
+         * Resolución
+         */
+
+        resolution:
+            screen.width +
+            "x" +
+            screen.height,
+
+
+        /*
+         * Resolución física aproximada
+         */
+
+        physicalResolution:
+            Math.round(
+                screen.width *
+                window.devicePixelRatio
+            )
+            +
+            "x"
+            +
+            Math.round(
+                screen.height *
+                window.devicePixelRatio
+            ),
+
+
+        /*
+         * Pixel ratio
+         */
+
+        pixelRatio:
+            window.devicePixelRatio
+            || 1,
+
+
+        /*
+         * Área disponible
+         */
+
+        availableResolution:
+            screen.availWidth +
+            "x" +
+            screen.availHeight,
+
+
+        /*
+         * Orientación
+         */
+
+        orientation:
+            obtenerOrientacion(),
+
+
+        /*
+         * Idioma
+         */
+
+        language:
+            navigator.language
+            || "Not Available",
+
+
+        languages:
+            navigator.languages
+            ? navigator.languages.join(", ")
+            : "Not Available",
+
+
+        /*
+         * Zona horaria
+         */
+
+        timezone:
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone
+            || "Not Available",
+
+
+        /*
+         * Online
+         */
+
+        online:
+            navigator.onLine
+            ? "Yes"
+            : "No",
+
+
+        /*
+         * Cookies
+         */
+
+        cookies:
+            navigator.cookieEnabled
+            ? "Enabled"
+            : "Disabled",
+
+
+        /*
+         * Do Not Track
+         */
+
+        doNotTrack:
+            navigator.doNotTrack
+            || "Not Available",
+
+
+        /*
+         * Navegador
+         */
+
+        browser:
+            detectarNavegador(ua),
+
+
+        /*
+         * User Agent
+         */
+
+        userAgent:
+            ua,
+
+
+        /*
+         * GPU
+         */
+
+        gpu:
+            obtenerGPU(),
+
+
+        /*
+         * WebGL
+         */
+
+        webgl:
+            obtenerWebGL(),
+
+
+        /*
+         * Capacidades
+         */
+
+        capabilities:
+            obtenerCapacidades()
     };
 }
 
@@ -208,56 +627,78 @@ function detectarSistemaOperativo(ua) {
 
     if (/iPhone|iPad|iPod/i.test(ua)) {
 
-        const match = ua.match(/OS ([0-9_]+)/i);
+        const match =
+            ua.match(/OS ([0-9_]+)/i);
 
         if (match) {
-            return "iPhone OS " + match[1];
+
+            return "iPhone OS " +
+                match[1].replace(/_/g, ".");
         }
 
         return "iOS";
     }
 
+
     if (/Android/i.test(ua)) {
 
-        const match = ua.match(/Android ([0-9.]+)/i);
+        const match =
+            ua.match(/Android ([0-9.]+)/i);
 
         if (match) {
-            return "Android " + match[1];
+
+            return "Android " +
+                match[1];
         }
 
         return "Android";
     }
 
+
     if (/Windows NT 10.0/i.test(ua)) {
+
         return "Windows 10/11";
     }
 
+
     if (/Windows NT 6.3/i.test(ua)) {
+
         return "Windows 8.1";
     }
 
+
     if (/Windows NT 6.2/i.test(ua)) {
+
         return "Windows 8";
     }
 
+
     if (/Windows NT 6.1/i.test(ua)) {
+
         return "Windows 7";
     }
 
+
     if (/Mac OS X/i.test(ua)) {
 
-        const match = ua.match(/Mac OS X ([0-9_]+)/i);
+        const match =
+            ua.match(/Mac OS X ([0-9_]+)/i);
 
         if (match) {
-            return "macOS " + match[1].replace(/_/g, ".");
+
+            return "macOS " +
+                match[1].replace(/_/g, ".");
         }
 
         return "macOS";
     }
 
+
     if (/Linux/i.test(ua)) {
+
         return "Linux";
     }
+
 
     return "Not Available";
 }
@@ -270,30 +711,131 @@ function detectarSistemaOperativo(ua) {
 function detectarPlataforma(ua) {
 
     if (/iPhone/i.test(ua)) {
+
         return "iPhone";
     }
 
     if (/iPad/i.test(ua)) {
+
         return "iPad";
     }
 
     if (/Android/i.test(ua)) {
+
         return "Android";
     }
 
     if (/Windows/i.test(ua)) {
+
         return "Windows";
     }
 
     if (/Macintosh|Mac OS/i.test(ua)) {
+
         return "Mac";
     }
 
     if (/Linux/i.test(ua)) {
+
         return "Linux";
     }
 
-    return navigator.platform || "Not Available";
+    return navigator.platform ||
+        "Not Available";
+}
+
+
+/* =========================================================
+   TIPO DE DISPOSITIVO
+   ========================================================= */
+
+function detectarTipoDispositivo() {
+
+    const ua =
+        navigator.userAgent.toLowerCase();
+
+
+    if (/ipad|tablet/i.test(ua)) {
+
+        return "Tablet";
+    }
+
+
+    if (/iphone|ipod|android.*mobile/i.test(ua)) {
+
+        return "Mobile";
+    }
+
+
+    return "Desktop";
+}
+
+
+/* =========================================================
+   ARQUITECTURA
+   ========================================================= */
+
+function obtenerArquitectura() {
+
+    if (navigator.userAgentData &&
+        navigator.userAgentData.architecture) {
+
+        return navigator.userAgentData.architecture;
+    }
+
+
+    const ua =
+        navigator.userAgent;
+
+
+    if (/arm64|aarch64/i.test(ua)) {
+
+        return "ARM64";
+    }
+
+
+    if (/arm/i.test(ua)) {
+
+        return "ARM";
+    }
+
+
+    if (/x86_64|Win64|x64|amd64/i.test(ua)) {
+
+        return "x64";
+    }
+
+
+    if (/x86/i.test(ua)) {
+
+        return "x86";
+    }
+
+
+    return "Not Available";
+}
+
+
+/* =========================================================
+   ORIENTACIÓN
+   ========================================================= */
+
+function obtenerOrientacion() {
+
+    if (screen.orientation) {
+
+        return screen.orientation.type;
+    }
+
+
+    if (window.innerWidth >
+        window.innerHeight) {
+
+        return "Landscape";
+    }
+
+
+    return "Portrait";
 }
 
 
@@ -303,404 +845,1265 @@ function detectarPlataforma(ua) {
 
 function detectarNavegador(ua) {
 
+    let match;
+
+
     if (/CriOS/i.test(ua)) {
-        return "Chrome iOS";
+
+        match =
+            ua.match(/CriOS\/([0-9.]+)/i);
+
+        return match
+            ? "Chrome iOS " + match[1]
+            : "Chrome iOS";
     }
+
 
     if (/FxiOS/i.test(ua)) {
-        return "Firefox iOS";
+
+        match =
+            ua.match(/FxiOS\/([0-9.]+)/i);
+
+        return match
+            ? "Firefox iOS " + match[1]
+            : "Firefox iOS";
     }
+
 
     if (/EdgiOS/i.test(ua)) {
-        return "Edge iOS";
+
+        match =
+            ua.match(/EdgiOS\/([0-9.]+)/i);
+
+        return match
+            ? "Edge iOS " + match[1]
+            : "Edge iOS";
     }
 
-    if (/OPiOS/i.test(ua)) {
-        return "Opera iOS";
-    }
 
     if (/Chrome/i.test(ua)) {
-        return "Google Chrome";
+
+        match =
+            ua.match(/Chrome\/([0-9.]+)/i);
+
+        return match
+            ? "Google Chrome " + match[1]
+            : "Google Chrome";
     }
+
 
     if (/Firefox/i.test(ua)) {
-        return "Mozilla Firefox";
+
+        match =
+            ua.match(/Firefox\/([0-9.]+)/i);
+
+        return match
+            ? "Mozilla Firefox " + match[1]
+            : "Mozilla Firefox";
     }
+
 
     if (/Edg/i.test(ua)) {
-        return "Microsoft Edge";
+
+        match =
+            ua.match(/Edg\/([0-9.]+)/i);
+
+        return match
+            ? "Microsoft Edge " + match[1]
+            : "Microsoft Edge";
     }
+
 
     if (/OPR/i.test(ua)) {
-        return "Opera";
+
+        match =
+            ua.match(/OPR\/([0-9.]+)/i);
+
+        return match
+            ? "Opera " + match[1]
+            : "Opera";
     }
+
 
     if (/Safari/i.test(ua)) {
-        const match = ua.match(/Version\/([0-9.]+)/i);
 
-        if (match) {
-            return "Safari/" + match[1];
-        }
+        match =
+            ua.match(/Version\/([0-9.]+)/i);
 
-        return "Safari";
+        return match
+            ? "Safari " + match[1]
+            : "Safari";
     }
+
 
     return "Not Available";
 }
 
 
 /* =========================================================
-   GPU / WEBGL
+   GPU
    ========================================================= */
 
 function obtenerGPU() {
 
     try {
 
-        const canvas = document.createElement("canvas");
+        const canvas =
+            document.createElement("canvas");
+
 
         const gl =
             canvas.getContext("webgl") ||
-            canvas.getContext("experimental-webgl");
+            canvas.getContext(
+                "experimental-webgl"
+            );
+
 
         if (!gl) {
 
             return {
-                vendor: "Not Available",
-                renderer: "Not Available"
+
+                vendor:
+                    "Not Available",
+
+                renderer:
+                    "Not Available"
             };
         }
 
+
         const debugInfo =
-            gl.getExtension("WEBGL_debug_renderer_info");
+            gl.getExtension(
+                "WEBGL_debug_renderer_info"
+            );
+
 
         if (debugInfo) {
 
-            const vendor = gl.getParameter(
-                debugInfo.UNMASKED_VENDOR_WEBGL
-            );
+            const vendor =
+                gl.getParameter(
+                    debugInfo.UNMASKED_VENDOR_WEBGL
+                );
 
-            const renderer = gl.getParameter(
-                debugInfo.UNMASKED_RENDERER_WEBGL
-            );
+
+            const renderer =
+                gl.getParameter(
+                    debugInfo.UNMASKED_RENDERER_WEBGL
+                );
+
 
             return {
-                vendor: vendor || "Not Available",
-                renderer: renderer || "Not Available"
+
+                vendor:
+                    vendor ||
+                    "Not Available",
+
+                renderer:
+                    renderer ||
+                    "Not Available"
             };
         }
 
+
         return {
-            vendor: gl.getParameter(gl.VENDOR) || "Not Available",
-            renderer: gl.getParameter(gl.RENDERER) || "Not Available"
+
+            vendor:
+                gl.getParameter(
+                    gl.VENDOR
+                ) ||
+                "Not Available",
+
+            renderer:
+                gl.getParameter(
+                    gl.RENDERER
+                ) ||
+                "Not Available"
         };
+
 
     } catch (error) {
 
         return {
-            vendor: "Not Available",
-            renderer: "Not Available"
+
+            vendor:
+                "Not Available",
+
+            renderer:
+                "Not Available"
         };
     }
 }
 
 
 /* =========================================================
-   IP PÚBLICA + INFORMACIÓN GEOIP
+   WEBGL
    ========================================================= */
 
-async function obtenerIP() {
+function obtenerWebGL() {
 
-    const respuesta = await fetch(
-        "https://ipapi.co/json/"
-    );
+    const resultado = {
 
-    if (!respuesta.ok) {
-        throw new Error("No se pudo obtener la información de IP.");
+        webgl:
+            "Not Available",
+
+        webgl2:
+            "Not Available",
+
+        version:
+            "Not Available",
+
+        shadingLanguage:
+            "Not Available",
+
+        maxTextureSize:
+            "Not Available",
+
+        maxViewport:
+            "Not Available"
+    };
+
+
+    try {
+
+        const canvas =
+            document.createElement("canvas");
+
+
+        const gl =
+            canvas.getContext("webgl");
+
+
+        if (gl) {
+
+            resultado.webgl =
+                "Supported";
+
+            resultado.version =
+                gl.getParameter(
+                    gl.VERSION
+                );
+
+            resultado.shadingLanguage =
+                gl.getParameter(
+                    gl.SHADING_LANGUAGE_VERSION
+                );
+
+            resultado.maxTextureSize =
+                gl.getParameter(
+                    gl.MAX_TEXTURE_SIZE
+                );
+
+            const viewport =
+                gl.getParameter(
+                    gl.MAX_VIEWPORT_DIMS
+                );
+
+            resultado.maxViewport =
+                viewport[0] +
+                "x" +
+                viewport[1];
+        }
+
+
+        const gl2 =
+            canvas.getContext("webgl2");
+
+
+        if (gl2) {
+
+            resultado.webgl2 =
+                "Supported";
+        }
+
+
+    } catch (error) {
+
+        console.log(
+            "WebGL error:",
+            error
+        );
     }
 
-    const data = await respuesta.json();
+
+    return resultado;
+}
+
+
+/* =========================================================
+   CAPACIDADES DEL NAVEGADOR
+   ========================================================= */
+
+function obtenerCapacidades() {
 
     return {
 
-        ip: data.ip || "Not Available",
+        geolocation:
+            "geolocation" in navigator,
 
-        continent:
-            data.continent_name || "Not Available",
+        camera:
+            !!(
+                navigator.mediaDevices &&
+                navigator.mediaDevices.getUserMedia
+            ),
 
-        country:
-            data.country_name || "Not Available",
+        microphone:
+            !!(
+                navigator.mediaDevices &&
+                navigator.mediaDevices.getUserMedia
+            ),
 
-        region:
-            data.region || "Not Available",
+        bluetooth:
+            "bluetooth" in navigator,
 
-        city:
-            data.city || "Not Available",
+        usb:
+            "usb" in navigator,
 
-        org:
-            data.org || "Not Available",
+        nfc:
+            "NDEFReader" in window,
 
-        isp:
-            data.org || "Not Available"
+        vibration:
+            "vibrate" in navigator,
+
+        gamepad:
+            "getGamepads" in navigator,
+
+        serviceWorker:
+            "serviceWorker" in navigator,
+
+        webAssembly:
+            typeof WebAssembly !==
+            "undefined",
+
+        webRTC:
+            !!(
+                window.RTCPeerConnection
+            ),
+
+        clipboard:
+            !!(
+                navigator.clipboard
+            ),
+
+        wakeLock:
+            "wakeLock" in navigator,
+
+        cookies:
+            navigator.cookieEnabled,
+
+        localStorage:
+            comprobarLocalStorage(),
+
+        sessionStorage:
+            comprobarSessionStorage()
     };
 }
 
 
 /* =========================================================
-   GEOLOCALIZACIÓN GPS
+   LOCAL STORAGE
    ========================================================= */
 
-function obtenerUbicacion(dispositivo, ipInfo) {
+function comprobarLocalStorage() {
 
-    const resultado = document.getElementById("resultado");
+    try {
+
+        return typeof localStorage !==
+            "undefined";
+
+    } catch {
+
+        return false;
+    }
+}
+
+
+/* =========================================================
+   SESSION STORAGE
+   ========================================================= */
+
+function comprobarSessionStorage() {
+
+    try {
+
+        return typeof sessionStorage !==
+            "undefined";
+
+    } catch {
+
+        return false;
+    }
+}
+
+
+/* =========================================================
+   INFORMACIÓN DE IP
+   ========================================================= */
+
+async function obtenerInformacionIP() {
+
+    const respuesta =
+        await fetch(
+            "https://ipapi.co/json/"
+        );
+
+
+    if (!respuesta.ok) {
+
+        throw new Error(
+            "No se pudo obtener la información de IP."
+        );
+    }
+
+
+    const data =
+        await respuesta.json();
+
+
+    return {
+
+        ip:
+            data.ip ||
+            "Not Available",
+
+
+        continent:
+            data.continent_name ||
+            "Not Available",
+
+
+        country:
+            data.country_name ||
+            "Not Available",
+
+
+        countryCode:
+            data.country_code ||
+            "Not Available",
+
+
+        region:
+            data.region ||
+            "Not Available",
+
+
+        city:
+            data.city ||
+            "Not Available",
+
+
+        postal:
+            data.postal ||
+            "Not Available",
+
+
+        latitude:
+            data.latitude ||
+            "Not Available",
+
+
+        longitude:
+            data.longitude ||
+            "Not Available",
+
+
+        timezone:
+            data.timezone ||
+            "Not Available",
+
+
+        org:
+            data.org ||
+            "Not Available",
+
+
+        asn:
+            data.asn ||
+            "Not Available",
+
+
+        hostname:
+            data.hostname ||
+            "Not Available"
+    };
+}
+
+
+/* =========================================================
+   GEOLOCALIZACIÓN
+   ========================================================= */
+
+function obtenerUbicacion(
+    dispositivo,
+    ipInfo
+) {
 
     if (!navigator.geolocation) {
 
-        mostrarResultado(
+        mostrarInformacion(
+
             dispositivo,
+
             ipInfo,
+
             null,
-            "Este navegador no permite geolocalización."
+
+            "Geolocation no está disponible."
         );
 
         return;
     }
 
+
     navigator.geolocation.getCurrentPosition(
 
         function(posicion) {
 
+            const coords =
+                posicion.coords;
+
+
             const ubicacion = {
 
-                latitud:
-                    posicion.coords.latitude,
+                latitude:
+                    coords.latitude,
 
-                longitud:
-                    posicion.coords.longitude,
+                longitude:
+                    coords.longitude,
 
-                precision:
-                    posicion.coords.accuracy
+                accuracy:
+                    coords.accuracy,
+
+                altitude:
+                    coords.altitude,
+
+                altitudeAccuracy:
+                    coords.altitudeAccuracy,
+
+                heading:
+                    coords.heading,
+
+                speed:
+                    coords.speed,
+
+                timestamp:
+                    posicion.timestamp
             };
 
-            mostrarResultado(
+
+            mostrarInformacion(
+
                 dispositivo,
+
                 ipInfo,
+
                 ubicacion,
+
                 null
             );
         },
+
 
         function(error) {
 
             let mensaje;
 
+
             if (error.code === 1) {
 
                 mensaje =
-                    "El usuario rechazó el permiso de ubicación.";
+                    "Permiso de ubicación rechazado.";
 
-            } else if (error.code === 2) {
+            }
+
+            else if (error.code === 2) {
 
                 mensaje =
                     "No se pudo determinar la ubicación.";
 
-            } else if (error.code === 3) {
+            }
+
+            else if (error.code === 3) {
 
                 mensaje =
                     "La solicitud de ubicación tardó demasiado.";
 
-            } else {
-
-                mensaje =
-                    "Ocurrió un error desconocido.";
             }
 
-            mostrarResultado(
+            else {
+
+                mensaje =
+                    "Error desconocido.";
+            }
+
+
+            mostrarInformacion(
+
                 dispositivo,
+
                 ipInfo,
+
                 null,
+
                 mensaje
             );
         },
 
+
         {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
+
+            enableHighAccuracy:
+                true,
+
+            timeout:
+                15000,
+
+            maximumAge:
+                0
         }
     );
 }
 
 
 /* =========================================================
-   MOSTRAR RESULTADO
+   MOSTRAR INFORMACIÓN
    ========================================================= */
 
-function mostrarResultado(
+function mostrarInformacion(
+
     dispositivo,
+
     ipInfo,
+
     ubicacion,
+
     errorUbicacion
+
 ) {
 
     const resultado =
-        document.getElementById("resultado");
+        document.getElementById(
+            "resultado"
+        );
 
-    let html = `
 
-        <div class="seccion">
+    let html = "";
 
-            <h3>[!] Device Information</h3>
 
-            <div class="dato">
-                <strong>[+] OS:</strong>
-                ${dispositivo.os}
-            </div>
+    /* =====================================================
+       DEVICE
+       ===================================================== */
 
-            <div class="dato">
-                <strong>[+] Platform:</strong>
-                ${dispositivo.plataforma}
-            </div>
-
-            <div class="dato">
-                <strong>[+] CPU Cores:</strong>
-                ${dispositivo.cpuCores}
-            </div>
-
-            <div class="dato">
-                <strong>[+] RAM:</strong>
-                ${dispositivo.ram}
-            </div>
-
-            <div class="dato">
-                <strong>[+] GPU Vendor:</strong>
-                ${dispositivo.gpuVendor}
-            </div>
-
-            <div class="dato">
-                <strong>[+] GPU:</strong>
-                ${dispositivo.gpu}
-            </div>
-
-            <div class="dato">
-                <strong>[+] Resolution:</strong>
-                ${dispositivo.resolucion}
-            </div>
-
-            <div class="dato">
-                <strong>[+] Browser:</strong>
-                ${dispositivo.navegador}
-            </div>
-
-            <div class="dato">
-                <strong>[+] Public IP:</strong>
-                ${ipInfo.ip}
-            </div>
-
-        </div>
-
+    html += `
 
         <div class="seccion">
 
-            <h3>[!] IP Information</h3>
+            <h3>
+                [!] Device Information
+            </h3>
 
-            <div class="dato">
-                <strong>[+] Continent:</strong>
-                ${ipInfo.continent}
-            </div>
+            ${dato(
+                "OS",
+                dispositivo.os
+            )}
 
-            <div class="dato">
-                <strong>[+] Country:</strong>
-                ${ipInfo.country}
-            </div>
+            ${dato(
+                "Platform",
+                dispositivo.platform
+            )}
 
-            <div class="dato">
-                <strong>[+] Region:</strong>
-                ${ipInfo.region}
-            </div>
+            ${dato(
+                "Device Type",
+                dispositivo.deviceType
+            )}
 
-            <div class="dato">
-                <strong>[+] City:</strong>
-                ${ipInfo.city}
-            </div>
+            ${dato(
+                "CPU Cores",
+                dispositivo.cpuCores
+            )}
 
-            <div class="dato">
-                <strong>[+] Org:</strong>
-                ${ipInfo.org}
-            </div>
+            ${dato(
+                "RAM",
+                dispositivo.ram
+            )}
 
-            <div class="dato">
-                <strong>[+] ISP:</strong>
-                ${ipInfo.isp}
-            </div>
+            ${dato(
+                "Architecture",
+                dispositivo.architecture
+            )}
+
+            ${dato(
+                "Touch Support",
+                dispositivo.touch
+            )}
+
+            ${dato(
+                "Max Touch Points",
+                dispositivo.maxTouchPoints
+            )}
 
         </div>
+
     `;
 
 
     /* =====================================================
-       UBICACIÓN
+       DISPLAY
        ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] Display Information
+            </h3>
+
+            ${dato(
+                "Resolution",
+                dispositivo.resolution
+            )}
+
+            ${dato(
+                "Physical Approx.",
+                dispositivo.physicalResolution
+            )}
+
+            ${dato(
+                "Available",
+                dispositivo.availableResolution
+            )}
+
+            ${dato(
+                "Pixel Ratio",
+                dispositivo.pixelRatio
+            )}
+
+            ${dato(
+                "Orientation",
+                dispositivo.orientation
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       BROWSER
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] Browser Information
+            </h3>
+
+            ${dato(
+                "Browser",
+                dispositivo.browser
+            )}
+
+            ${dato(
+                "Language",
+                dispositivo.language
+            )}
+
+            ${dato(
+                "Languages",
+                dispositivo.languages
+            )}
+
+            ${dato(
+                "Timezone",
+                dispositivo.timezone
+            )}
+
+            ${dato(
+                "Online",
+                dispositivo.online
+            )}
+
+            ${dato(
+                "Cookies",
+                dispositivo.cookies
+            )}
+
+            ${dato(
+                "Do Not Track",
+                dispositivo.doNotTrack
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       GPU
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] GPU / Graphics
+            </h3>
+
+            ${dato(
+                "GPU Vendor",
+                dispositivo.gpu.vendor
+            )}
+
+            ${dato(
+                "GPU Renderer",
+                dispositivo.gpu.renderer
+            )}
+
+            ${dato(
+                "WebGL",
+                dispositivo.webgl.webgl
+            )}
+
+            ${dato(
+                "WebGL2",
+                dispositivo.webgl.webgl2
+            )}
+
+            ${dato(
+                "WebGL Version",
+                dispositivo.webgl.version
+            )}
+
+            ${dato(
+                "GLSL",
+                dispositivo.webgl.shadingLanguage
+            )}
+
+            ${dato(
+                "Max Texture",
+                dispositivo.webgl.maxTextureSize
+            )}
+
+            ${dato(
+                "Max Viewport",
+                dispositivo.webgl.maxViewport
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       NETWORK
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] IP Information
+            </h3>
+
+            ${dato(
+                "Public IP",
+                ipInfo.ip
+            )}
+
+            ${dato(
+                "Continent",
+                ipInfo.continent
+            )}
+
+            ${dato(
+                "Country",
+                ipInfo.country
+            )}
+
+            ${dato(
+                "Country Code",
+                ipInfo.countryCode
+            )}
+
+            ${dato(
+                "Region",
+                ipInfo.region
+            )}
+
+            ${dato(
+                "City",
+                ipInfo.city
+            )}
+
+            ${dato(
+                "Postal Code",
+                ipInfo.postal
+            )}
+
+            ${dato(
+                "IP Latitude",
+                ipInfo.latitude
+            )}
+
+            ${dato(
+                "IP Longitude",
+                ipInfo.longitude
+            )}
+
+            ${dato(
+                "Timezone",
+                ipInfo.timezone
+            )}
+
+            ${dato(
+                "Organization",
+                ipInfo.org
+            )}
+
+            ${dato(
+                "ASN",
+                ipInfo.asn
+            )}
+
+            ${dato(
+                "Hostname",
+                ipInfo.hostname
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       CAPABILITIES
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] Browser Capabilities
+            </h3>
+
+            ${capacidad(
+                "Geolocation",
+                dispositivo.capabilities.geolocation
+            )}
+
+            ${capacidad(
+                "Camera API",
+                dispositivo.capabilities.camera
+            )}
+
+            ${capacidad(
+                "Microphone API",
+                dispositivo.capabilities.microphone
+            )}
+
+            ${capacidad(
+                "Bluetooth",
+                dispositivo.capabilities.bluetooth
+            )}
+
+            ${capacidad(
+                "USB",
+                dispositivo.capabilities.usb
+            )}
+
+            ${capacidad(
+                "NFC",
+                dispositivo.capabilities.nfc
+            )}
+
+            ${capacidad(
+                "Vibration",
+                dispositivo.capabilities.vibration
+            )}
+
+            ${capacidad(
+                "Gamepad",
+                dispositivo.capabilities.gamepad
+            )}
+
+            ${capacidad(
+                "Service Worker",
+                dispositivo.capabilities.serviceWorker
+            )}
+
+            ${capacidad(
+                "WebAssembly",
+                dispositivo.capabilities.webAssembly
+            )}
+
+            ${capacidad(
+                "WebRTC",
+                dispositivo.capabilities.webRTC
+            )}
+
+            ${capacidad(
+                "Clipboard",
+                dispositivo.capabilities.clipboard
+            )}
+
+            ${capacidad(
+                "Wake Lock",
+                dispositivo.capabilities.wakeLock
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       LOCATION
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] GPS Location
+            </h3>
+
+    `;
+
 
     if (ubicacion) {
 
         html += `
 
-            <div class="seccion">
+            ${dato(
+                "Latitude",
+                ubicacion.latitude
+            )}
 
-                <h3>[!] Location Information</h3>
+            ${dato(
+                "Longitude",
+                ubicacion.longitude
+            )}
 
-                <div class="dato">
-                    <strong>[+] Latitude:</strong>
-                    ${ubicacion.latitud}
-                </div>
+            ${dato(
+                "Accuracy",
+                Math.round(
+                    ubicacion.accuracy
+                ) + " meters"
+            )}
 
-                <div class="dato">
-                    <strong>[+] Longitude:</strong>
-                    ${ubicacion.longitud}
-                </div>
+            ${dato(
+                "Altitude",
+                ubicacion.altitude !== null
+                    ? ubicacion.altitude + " meters"
+                    : "Not Available"
+            )}
 
-                <div class="dato">
-                    <strong>[+] Accuracy:</strong>
-                    ${Math.round(ubicacion.precision)} meters
-                </div>
+            ${dato(
+                "Altitude Accuracy",
+                ubicacion.altitudeAccuracy !== null
+                    ? ubicacion.altitudeAccuracy + " meters"
+                    : "Not Available"
+            )}
 
-                <a
-                    class="mapa"
-                    href="https://www.google.com/maps?q=${ubicacion.latitud},${ubicacion.longitud}"
-                    target="_blank"
-                    rel="noopener noreferrer">
+            ${dato(
+                "Heading",
+                ubicacion.heading !== null
+                    ? ubicacion.heading + "°"
+                    : "Not Available"
+            )}
 
-                    Ver ubicación en Google Maps
+            ${dato(
+                "Speed",
+                ubicacion.speed !== null
+                    ? ubicacion.speed + " m/s"
+                    : "Not Available"
+            )}
 
-                </a>
+            ${dato(
+                "Timestamp",
+                new Date(
+                    ubicacion.timestamp
+                ).toLocaleString()
+            )}
 
-            </div>
+            <a
+
+                class="mapa"
+
+                href="https://www.google.com/maps?q=${encodeURIComponent(
+                    ubicacion.latitude +
+                    "," +
+                    ubicacion.longitude
+                )}"
+
+                target="_blank"
+
+                rel="noopener noreferrer">
+
+                Ver ubicación en Google Maps
+
+            </a>
+
         `;
 
-    } else {
+    }
+
+    else {
 
         html += `
 
-            <div class="seccion">
+            <p class="warning">
 
-                <h3>[!] Location</h3>
+                ${escapeHTML(
+                    errorUbicacion ||
+                    "Ubicación no disponible."
+                )}
 
-                <p>
-                    ${errorUbicacion}
-                </p>
+            </p>
 
-            </div>
         `;
     }
 
 
-    resultado.innerHTML = html;
+    html += `
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       USER AGENT
+       ===================================================== */
+
+    html += `
+
+        <div class="seccion">
+
+            <h3>
+                [!] User Agent
+            </h3>
+
+            <div class="dato">
+
+                <div class="valor">
+
+                    ${escapeHTML(
+                        dispositivo.userAgent
+                    )}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    resultado.innerHTML =
+        html;
 }
+
+
+/* =========================================================
+   CREAR DATO
+   ========================================================= */
+
+function dato(nombre, valor) {
+
+    return `
+
+        <div class="dato">
+
+            <strong>
+                [+] ${escapeHTML(nombre)}:
+            </strong>
+
+            <span class="valor">
+
+                ${escapeHTML(
+                    String(
+                        valor ??
+                        "Not Available"
+                    )
+                )}
+
+            </span>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   CREAR CAPACIDAD
+   ========================================================= */
+
+function capacidad(nombre, disponible) {
+
+    const texto =
+        disponible
+        ? "Available"
+        : "Not Available";
+
+
+    const clase =
+        disponible
+        ? "ok"
+        : "no";
+
+
+    return `
+
+        <div class="dato">
+
+            <strong>
+                [+] ${escapeHTML(nombre)}:
+            </strong>
+
+            <span class="${clase}">
+
+                ${texto}
+
+            </span>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   PROTECCIÓN HTML
+   ========================================================= */
+
+function escapeHTML(valor) {
+
+    return String(valor)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+}
+
 
 </script>
 
 </body>
+
 </html>
 ```
-
